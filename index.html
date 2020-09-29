@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>OpenShift HelloWorld</title>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        // BACKEND_PATH_CONFIG
+    </script>
+  </head>
+  <body>
+    <div>
+        <h1>OpenShift Hello World App</h1>
+
+        <h2>Fake weather forecast</h2>
+        
+        <div id="weather-container">
+
+        </div>
+
+    </div>
+  </body>
+  <script>
+      var backend_path = window.backend_path || '/ws';
+      $(document).ready(function() {
+        console.log(backend_path + '/weatherforecast');
+          $.ajax({
+              url: document.location.origin + '/' + backend_path + '/weatherforecast',
+              async: true,
+              method: 'GET',
+              success: function(result) {
+                console.log('success')
+                var weatherContainer = $('#weather-container');
+                result.forEach(element => {
+                    var dateLabel = $('<span></span>').text(element.date);
+                    var temperatureLabel = $('<span></span>').text(element.temperatureC);
+                    var summaryLabel = $('<span></span>').text(element.summary);
+
+                    var weatherItem = $('<div></div>');
+                    weatherItem.css('border-style', 'dotted')
+
+                    weatherItem.append(dateLabel);
+                    weatherItem.append('<br >');
+                    weatherItem.append(temperatureLabel);
+                    weatherItem.append('<br >');
+                    weatherItem.append(summaryLabel);
+
+                    weatherContainer.append(weatherItem);
+                });
+              },
+              error: function(err) {
+                  console.table(err);
+              }
+          })
+      })
+  </script>
+</html>
